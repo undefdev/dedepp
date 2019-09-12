@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int N = 4;
+const int N = 7;
 typedef bitset<N> vect;
 typedef bitset<1<<N> boolfunc;
 vector<boolfunc> M;
@@ -26,10 +26,20 @@ void generate_M(){
 	}
 }
 
-//long long unsigned dede( boolfunc f, vect juan )
+long long unsigned dede( boolfunc f, int i ) {
+	long long unsigned res = 1;
+	//cout<<f<<endl;
+	vect juan = vect(i);
+	for (int j=i+1; j<(1<<N); ++j) {
+		if ( (f&boolfunc( 1<<j )) == 0 )
+			res += dede( f | M[j], j );
+	}
+	return res;
+}
 
 int main(){
 	generate_M();
+	cout<<dede(boolfunc(0), 0)+1;
 	return 0;
 }
 
