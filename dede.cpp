@@ -5,10 +5,11 @@
 
 using namespace std;
 
-const int N = 7;
+const int N = 4;
 typedef bitset<N> vect;
 typedef bitset<1<<N> boolfunc;
 vector<boolfunc> M;
+int res[1<<N][1<<N];
 
 void generate_M(){
 	M = vector<boolfunc>();
@@ -26,10 +27,11 @@ void generate_M(){
 	}
 }
 
-long long unsigned dede( boolfunc f, int i ) {
+
+// That's a loooong unsigned long y'have there...
+long unsigned long dede( boolfunc f, int i ) {
 	long long unsigned res = 1;
 	//cout<<f<<endl;
-	vect juan = vect(i);
 	for (int j=i+1; j<(1<<N); ++j) {
 		if ( (f&boolfunc( 1<<j )) == 0 )
 			res += dede( f | M[j], j );
@@ -37,9 +39,26 @@ long long unsigned dede( boolfunc f, int i ) {
 	return res;
 }
 
+void generate_res();
+  for (int i=0; i<(1<<N); ++i) for (int j=i+1; j<(1<<N); ++j) {
+      if((M[i] & boolfunc(1<<j))==0)
+        res[i][j]= dede(M[i]|M[j], j);
+  }
+}
+
 int main(){
 	generate_M();
-	cout<<dede(boolfunc(0), 0)+1;
+	cout<<dede(boolfunc(0), 0)+1<<endl<<endl;
+  generate_res();
+
+  for (int i=0; i<(1<<N); ++i) {
+    for (int j=0; j<(1<<N); ++j)
+      cout<<res[i][j]<<" ";
+    cout<<endl;
+  }
+
+
+
 	return 0;
 }
 
